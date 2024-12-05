@@ -1,7 +1,26 @@
 import csv
 import datetime
+import magic
 import pdfplumber
 import os
+
+
+
+# Helper Function: Check if a file is a valid PDF
+def is_pdf(file) -> bool:
+    """
+    Determines if a file is a valid PDF based on its MIME type.
+
+    Args:
+        file: A file object to check.
+
+    Returns:
+        bool: True if the file is a PDF, otherwise False.
+    """
+    mime = magic.Magic(mime=True)
+    mime_type = mime.from_buffer(file.read(1024))  # Read first 1024 bytes
+    file.seek(0)  # Reset file pointer after reading
+    return mime_type == 'application/pdf'
 
 
 def UUID():

@@ -1,8 +1,7 @@
 import os
-from flask import Flask, request, jsonify, abort, send_file
-from pdf_parser import extract_tables, UUID
+from flask import Flask, request, jsonify, send_file
+from utils import extract_tables, UUID, is_pdf
 from werkzeug.utils import secure_filename
-import magic
 import zipfile
 from io import BytesIO
 from threading import Thread
@@ -22,22 +21,6 @@ os.makedirs(CSV_FOLDER, exist_ok=True)
 # Configure Flask app for upload and CSV directories
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['CSV_FOLDER'] = CSV_FOLDER
-
-# Helper Function: Check if a file is a valid PDF
-def is_pdf(file) -> bool:
-    """
-    Determines if a file is a valid PDF based on its MIME type.
-
-    Args:
-        file: A file object to check.
-
-    Returns:
-        bool: True if the file is a PDF, otherwise False.
-    """
-    mime = magic.Magic(mime=True)
-    mime_type = mime.from_buffer(file.read(1024))  # Read first 1024 bytes
-    file.seek(0)  # Reset file pointer after reading
-    return mime_type == 'application/pdf'
 
 @app.route('/', methods=["POST"])
 def home():
