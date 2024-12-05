@@ -66,7 +66,7 @@ def extract_tables(source, target):
             # Loop through each table found on the current page
             for table_index, table in enumerate(tables, start=1):
                 # Define the output CSV file name based on table index
-                csv_file = f"{target}/page_{1}_table_no_{table_index}.csv"
+                csv_file = f"{target}/page_{i}_table_no_{table_index}.csv"
                 # Write the table data to the CSV file
                 with open(csv_file, "w", newline="") as f:
                     writer = csv.writer(f)
