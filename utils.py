@@ -49,17 +49,20 @@ def check_rows(table) -> bool:
         bool: True if all rows have the same length, False otherwise.
     """
     try:
-        if not table:  # If the table is empty, return True (no inconsistency)
-            return True
+        # Initialize expected_row_length to None, indicating it hasn't been set yet
+        expected_row_length = None
+        
+        for row in table:
+            # Filter out None values from the current row
+            filtered_row = [item for item in row if item is not None]
 
-        expected_row_length = len(table[0])  # Get the number of columns in the first row
+            # Set the expected_row_length if it's not set yet
+            if expected_row_length is None:
+                expected_row_length = len(filtered_row)
+            elif len(filtered_row) != expected_row_length:
+                return False  # Return False if the current row length doesn't match the expected length
 
-        # Check if all other rows have the same number of columns
-        for sublist in table:
-            if len(sublist) != expected_row_length:
-                return False  # Return False if any row has a different length
-
-        return True  # Return True if all rows are consistent
+        return True  # Return True if all rows have consistent lengths
     except Exception as e:
         print(f"Error in check_rows function: {e}")
         return False  # Return False if there's an error
@@ -99,11 +102,9 @@ def extract_tables(source: str, target: str) -> None:
                     
                     # Loop through each table found on the current page
                     for table_index, table in enumerate(tables, start=1):
-                        # Filter out rows containing None values
-                        filtered_table = [[item for item in rows if item is not None] for rows in table]
 
                         # Check if the filtered table is properly structured
-                        if not check_rows(filtered_table):
+                        if not check_rows(table):
                             with open(f"{target}/response.txt", "w") as f:
                                 f.write("400, Tables are not properly structured")  # Status code 400: Structure issue
                             return
