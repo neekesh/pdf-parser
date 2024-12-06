@@ -13,6 +13,18 @@ This project is a Flask-based API for extracting tables from PDF files and conve
 
 ---
 
+## Project Structure
+```
+project/
+│
+├── uploads/
+│   └── (both pdf and csv files will be stored here)
+│
+├── requirements.txt (requirements.txt)
+├── main.py
+└── utils.py
+```
+
 ## Requirements
 
 - Python 3.7+
